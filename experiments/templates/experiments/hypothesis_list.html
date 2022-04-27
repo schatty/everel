@@ -1,0 +1,28 @@
+{% extends 'experiments/base.html' %}
+
+{% block body %}
+
+<div class="container horizontal-scrollable">
+    <div class="row justify-content-start" >
+        <div class="col" style="background-color: beige;">
+            {% for hyp in object_list %}
+                <p>{{ hyp.name }}</p>
+            {% empty %}
+                <p>No runs yet.</p>
+            {% endfor %}
+        </div>
+        <div class="col" style="background-color:bisque; overflow-x: scroll;">
+                {% for run in runs %}
+                    <p><a href="{{ run.get_absolute_url }}">{{ run.datetime|date }} - {{ run.name }}></a></p>
+                {% empty %}
+                    <p>No runs yet.</p>
+                {% endfor %}
+        </div>
+        <div class="col-7" style="background-color:cornsilk">
+            One of two columns
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

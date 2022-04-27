@@ -5,7 +5,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 
-from .models import Run
+from .models import Run, Hypothesis
 
 
 def index(request):
@@ -25,10 +25,15 @@ class PageTitleMixin:
 
 
 class BrowseView(PageTitleMixin, ListView):
-    model = Run
+    model = Hypothesis
     success_url = reverse_lazy('browse')
-    paginate_by = 10
+    # paginate_by = 10
     page_title = "Browse"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["runs"] = Run.objects.all()
+        return  context
 
 
 class RunDetailView(PageTitleMixin, DetailView):
