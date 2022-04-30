@@ -1,6 +1,10 @@
+
 {% extends 'experiments/base.html' %}
 
 {% block body %}
+
+<!-- Load plotly.js into the DOM -->
+<script src='https://cdn.plot.ly/plotly-2.11.1.min.js'></script>
 
 <div class="container horizontal-scrollable">
     <div class="row justify-content-start" >
@@ -19,10 +23,43 @@
                 {% endfor %}
         </div>
         <div class="col-7" style="background-color:cornsilk">
-            One of two columns
+			<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
         </div>
     </div>
 </div>
+
+{{ trace1_data|json_script:"trace1_data" }}
+
+<script>
+    var trace1 = JSON.parse(document.getElementById('trace1_data').textContent);
+	<!-- trace1.showlegend = false; -->
+
+	var data = [trace1];
+	var layout = {
+	  paper_bgcolor: "rgb(255,255,255)", 
+	  plot_bgcolor: "rgb(229,229,229)", 
+	  xaxis: {
+		gridcolor: "rgb(255,255,255)", 
+		range: [1, 10], 
+		showgrid: true, 
+		showline: false, 
+		showticklabels: true, 
+		tickcolor: "rgb(127,127,127)", 
+		ticks: "outside", 
+		zeroline: false
+	  }, 
+	  yaxis: {
+		gridcolor: "rgb(255,255,255)", 
+		showgrid: true, 
+		showline: false, 
+		showticklabels: true, 
+		tickcolor: "rgb(127,127,127)", 
+		ticks: "outside", 
+		zeroline: false
+	  }
+	};
+	Plotly.newPlot('myDiv', data, layout);
+</script>
 
 
 {% endblock %}

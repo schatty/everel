@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 
+
 from .models import Run, Hypothesis
 
 
@@ -15,7 +16,7 @@ def index(request):
     return render(request, 'experiments/index.html', context=context)
 
 
-class PageTitleMixin:
+class PageTitleMixin():
     page_title = ''
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -33,6 +34,17 @@ class BrowseView(PageTitleMixin, ListView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["runs"] = Run.objects.all()
+        
+        obj1 = Run.objects.first()
+
+        context["trace1_data"] = {
+          "x": obj1.scalars["x"],
+          "y": obj1.scalars["y"],
+          "mode": "lines",
+          "name": "Fair", 
+          "type": "scatter"
+        };
+
         return  context
 
 
@@ -46,3 +58,5 @@ class RunDetailView(PageTitleMixin, DetailView):
     def get_object(self, **kwargs):
         _id = self.kwargs.get('id')
         return get_object_or_404(Run, id=str(_id))
+
+
