@@ -22,6 +22,7 @@ import experiments.views as experiment
 urlpatterns = [
     path('', experiment.index, name='home'),
     path('browse', experiment.BrowseView.as_view(), name='browse'),
+    path('browse/<int:id>', experiment.BrowseView.as_view(), name='browse'),
     path('run/detail/<int:id>', experiment.RunDetailView.as_view(), name='run_detail'),
     path('eauth/', include('eauth.urls', namespace='eauth')),
 

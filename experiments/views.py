@@ -30,22 +30,26 @@ class BrowseView(PageTitleMixin, ListView):
     success_url = reverse_lazy('browse')
     # paginate_by = 10
     page_title = "Browse"
+    pk_url_kwarg = 'id'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["runs"] = Run.objects.all()
-        
-        obj1 = Run.objects.first()
+        _id = self.kwargs.get('id')
 
-        context["trace1_data"] = {
-          "x": obj1.scalars["x"],
-          "y": obj1.scalars["y"],
-          "mode": "lines",
-          "name": "Fair", 
-          "type": "scatter"
-        };
+        if _id:
+            context["runs"] = Run.objects.filter(hypothesis__id=_id)
+            
+            obj1 = Run.objects.first()
 
-        return  context
+            context["trace1_data"] = {
+              "x": obj1.scalars["x"],
+              "y": obj1.scalars["y"],
+              "mode": "lines",
+              "name": "Fair", 
+              "type": "scatter"
+            };
+
+        return context
 
 
 class RunDetailView(PageTitleMixin, DetailView):

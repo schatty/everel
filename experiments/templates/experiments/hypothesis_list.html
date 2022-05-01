@@ -10,14 +10,14 @@
     <div class="row justify-content-start" >
         <div class="col" style="background-color: beige;">
             {% for hyp in object_list %}
-                <p>{{ hyp.name }}</p>
+			<a href="{{ hyp.get_absolute_url }}">{{ hyp.name }}</a><br>
             {% empty %}
                 <p>No runs yet.</p>
             {% endfor %}
         </div>
         <div class="col" style="background-color:bisque; overflow-x: scroll;">
                 {% for run in runs %}
-                    <p><a href="{{ run.get_absolute_url }}">{{ run.datetime|date }} - {{ run.name }}></a></p>
+				<a href="{{ run.get_absolute_url }}">{{ run.datetime|date }} - {{ run.name }}_seed{{ run.seed }}</a><br>
                 {% empty %}
                     <p>No runs yet.</p>
                 {% endfor %}

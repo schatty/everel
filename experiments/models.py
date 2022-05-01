@@ -28,6 +28,8 @@ class Hypothesis(models.Model):
     desciption = models.TextField(blank=True)
     confirmed = models.BooleanField(null=True)
      
+    def get_absolute_url(self):
+        return reverse("browse", args=[str(self.id)])
     
 
 class Run(models.Model):
@@ -44,9 +46,10 @@ class Run(models.Model):
     scalars = models.JSONField(default=dict)
     artifacts = models.JSONField(default=dict)
     checkpoints = models.JSONField(default=dict)
+    seed = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"run_{self.name}"
+        return f"run_{self.name}_seed_{self.seed:02d}"
 
     def get_tags(self):
         return list(sorted(self.scalars.keys()))
@@ -59,7 +62,6 @@ class RLRun(Run):
     """RL experimental run. """
     env = models.CharField(max_length=64, null=False)
     algo = models.CharField(max_length=64, null=False)
-    seed = models.IntegerField(null=False)
 
     def __str__(self):
         return f"{self.env}_{self.algo}_{self.name}_seed_{self.seed:02}"
