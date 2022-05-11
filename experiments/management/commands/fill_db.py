@@ -22,10 +22,12 @@ class Command(BaseCommand):
         system_data = {"CPU": "Intel i5", "RAM": "2GB"}
         x = np.arange(0, 10, 0.1)
         for i, sigma in enumerate([0.1, 0.5, 1, 2, 3]):
-            scalar_data = {
+            scalar_data = {}
+            for tag_i in range(4):
+                scalar_data[f"tag_{tag_i}"] = {
                     "x": x.tolist(),
                     "y": (x + np.random.randn(x.size) * sigma).tolist()
-            }
+                }
             Run.objects.get_or_create(
                 name=f"noised_line",
                 hypothesis=hyp,
@@ -41,10 +43,12 @@ class Command(BaseCommand):
         system_data = {"CPU": "Intel i5", "RAM": "2GB"}
         x = np.arange(0, 10, 0.1)
         for i, ar in enumerate([0.1, 0.5, 1, 2, 3]):
-            scalar_data = {
+            scalar_data = {}
+            for tag_i in range(4):
+                scalar_data[f"tag_{tag_i}"] = {
                     "x": x.tolist(),
-                    "y": np.sin(x * ar).tolist()
-            }
+                    "y": np.sin(tag_i + x * ar).tolist()
+                }
             Run.objects.get_or_create(
                 name=f"sin_line",
                 hypothesis=hyp,

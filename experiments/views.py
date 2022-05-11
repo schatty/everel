@@ -37,17 +37,21 @@ class BrowseView(PageTitleMixin, ListView):
         _id = self.kwargs.get('id')
 
         if _id:
-            context["runs"] = Run.objects.filter(hypothesis__id=_id)
-            
-            obj1 = Run.objects.first()
+            context["runs"] = Run.objects.filter(hypothesis__id=_id) 
 
-            context["trace1_data"] = {
-              "x": obj1.scalars["x"],
-              "y": obj1.scalars["y"],
-              "mode": "lines",
-              "name": "Fair", 
-              "type": "scatter"
-            };
+            obj1 = context["runs"][0] #Run.objects.filter() #first()
+            context["scalar_tags"] = obj1.scalars.keys()
+
+            context["scalar_data"] = {}
+            for tag in obj1.scalars:
+                context["scalar_data"][tag] = {
+                    "x": obj1.scalars[tag]["x"],
+                    "y": obj1.scalars[tag]["y"],
+                    "mode": "lines",
+                    "name": "Fair", 
+                    "type": "scatter",
+                    "showlegend": True
+                };
 
         return context
 

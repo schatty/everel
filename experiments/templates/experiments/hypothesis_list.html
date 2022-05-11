@@ -8,6 +8,7 @@
 
 <div class="container horizontal-scrollable">
     <div class="row justify-content-start" >
+		<!-- Hypothesis -->
         <div class="col" style="background-color: beige;">
             {% for hyp in object_list %}
 			<a href="{{ hyp.get_absolute_url }}">{{ hyp.name }}</a><br>
@@ -15,6 +16,7 @@
                 <p>No runs yet.</p>
             {% endfor %}
         </div>
+		<!-- Runs -->
         <div class="col" style="background-color:bisque; overflow-x: scroll;">
                 {% for run in runs %}
 				<a href="{{ run.get_absolute_url }}">{{ run.datetime|date }} - {{ run.name }}_seed{{ run.seed }}</a><br>
@@ -22,19 +24,26 @@
                     <p>No runs yet.</p>
                 {% endfor %}
         </div>
+		<!-- Scalars -->
         <div class="col-7" style="background-color:cornsilk">
-			<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+			{% for tag in scalar_tags %}
+				<div class="row">
+					<div class="col">
+						<h5>{{tag}}</h5>
+						<div id='{{tag}}Div'></div>
+					</div>
+				</div>
+			{% endfor %}
         </div>
     </div>
 </div>
 
-{{ trace1_data|json_script:"trace1_data" }}
+{{ scalar_data|json_script:"scalar_data" }}
 
 <script>
-    var trace1 = JSON.parse(document.getElementById('trace1_data').textContent);
-	<!-- trace1.showlegend = false; -->
+    var scalars = JSON.parse(document.getElementById('scalar_data').textContent);
+	// <!-- trace1.showlegend = false; -->
 
-	var data = [trace1];
 	var layout = {
 	  paper_bgcolor: "rgb(255,255,255)", 
 	  plot_bgcolor: "rgb(229,229,229)", 
@@ -58,7 +67,10 @@
 		zeroline: false
 	  }
 	};
-	Plotly.newPlot('myDiv', data, layout);
+
+	for (var k in scalars) {
+		Plotly.newPlot(k + "Div", [scalars[k]], layout);
+	}
 </script>
 
 
